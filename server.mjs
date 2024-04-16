@@ -2,12 +2,22 @@ import bcrypt from "bcrypt";
 import express from "express";
 import jwt from "jsonwebtoken";
 import mysql from "mysql";
+import winston from "winston";
 
 const saltRounds = 10;
 const app = express();
 app.use(express.json());
 // Jwt secret
 const secret = "secret";
+
+const logger = winston.createLogger({
+  transports: [
+    // Save the log in the file server.log
+    new winston.transports.File({ filename: "server.log" }),
+    // Show the log in the console
+    new winston.transports.Console(),
+  ],
+}); 
 
 const mysqlClient = mysql.createConnection({
   host: "localhost",
@@ -18,10 +28,10 @@ const mysqlClient = mysql.createConnection({
 
 mysqlClient.connect((err) => {
   if (err) {
-    console.error("Error connecting to database:", err);
+    logger.error("Error connecting to database:", err);
     return;
   }
-  console.log("Conexión exitosa a la base de datos");
+  logger.info("Conexión exitosa a la base de datos");
 });
 
 // Register user post
@@ -30,7 +40,7 @@ app.post("/register", (req, res) => {
 
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) {
-      console.error("Error hashing password:", err);
+      logger.error("Error hashing password:", err);
       res.status(500).send("Error hashing password");
       return;
     }
@@ -39,7 +49,7 @@ app.post("/register", (req, res) => {
 
     mysqlClient.query(query, (err, result) => {
       if (err) {
-        console.error("Error registering user:", err);
+        logger.error("Error registering user:", err);
         res.status(500).send("Error registering user");
         return;
       }
@@ -57,7 +67,7 @@ app.post("/login", (req, res) => {
 
   mysqlClient.query(query, (err, result) => {
     if (err) {
-      console.error("Error logging in:", err);
+      logger.error("Error logging in:", err);
       res.status(500).send("Error logging in");
       return;
     }
@@ -71,7 +81,7 @@ app.post("/login", (req, res) => {
 
     bcrypt.compare(password, user.password, (err, result) => {
       if (err) {
-        console.error("Error comparing passwords:", err);
+        logger.error("Error comparing passwords:", err);
         res.status(500).send("Error comparing passwords");
         return;
       }
@@ -134,7 +144,7 @@ app.get("/courses", checkToken, (req, res) => {
 
   mysqlClient.query(query, (err, result) => {
     if (err) {
-      console.error("Error getting courses:", err);
+      logger.error("Error getting courses:", err);
       res.status(500).send("Error getting courses");
       return;
     }
@@ -158,7 +168,7 @@ app.get("/highest-course", checkToken, (req, res) => {
 
   mysqlClient.query(query, (err, result) => {
     if (err) {
-      console.error("Error getting highest course:", err);
+      logger.error("Error getting highest course:", err);
       res.status(500).send("Error getting highest course");
       return;
     }
@@ -181,7 +191,7 @@ app.get("/lower-course", checkToken, (req, res) => {
 
   mysqlClient.query(query, (err, result) => {
     if (err) {
-      console.error("Error getting lower course:", err);
+      logger.error("Error getting lower course:", err);
       res.status(500).send("Error getting lower course");
       return;
     }
@@ -191,5 +201,5 @@ app.get("/lower-course", checkToken, (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log("Servidor iniciado en el puerto 3000 🚀");
+  logger.info("Servidor iniciado en el puerto 3000 🚀");
 });
