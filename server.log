@@ -1,2 +1,19 @@
 {"level":"info","message":"Servidor iniciado en el puerto 3000 🚀"}
 {"address":"::1","code":"ECONNREFUSED","errno":-4078,"fatal":true,"level":"error","message":"Error connecting to database: connect ECONNREFUSED ::1:3306","port":3306,"stack":"Error: connect ECONNREFUSED ::1:3306\n    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1494:16)\n    --------------------\n    at Protocol._enqueue (C:\\Users\\eliez\\OneDrive\\Escritorio\\jwt-practice\\node_modules\\mysql\\lib\\protocol\\Protocol.js:144:48)\n    at Protocol.handshake (C:\\Users\\eliez\\OneDrive\\Escritorio\\jwt-practice\\node_modules\\mysql\\lib\\protocol\\Protocol.js:51:23)\n    at Connection.connect (C:\\Users\\eliez\\OneDrive\\Escritorio\\jwt-practice\\node_modules\\mysql\\lib\\Connection.js:116:18)\n    at file:///C:/Users/eliez/OneDrive/Escritorio/jwt-practice/server.mjs:29:13\n    at ModuleJob.run (node:internal/modules/esm/module_job:193:25)","syscall":"connect"}
+{"level":"info","message":"Servidor iniciado en el puerto 3000 🚀"}
+{"level":"info","message":"Conexión exitosa a la base de datos"}
+{"level":"error","message":"Error comparing passwords: data and hash arguments required","stack":"Error: data and hash arguments required\n    at Object.compare (D:\\URl\\web\\jwt\\node_modules\\bcrypt\\bcrypt.js:208:17)\n    at Query.<anonymous> (file:///D:/URl/web/jwt/server.mjs:82:12)\n    at Query.<anonymous> (D:\\URl\\web\\jwt\\node_modules\\mysql\\lib\\Connection.js:526:10)\n    at Query._callback (D:\\URl\\web\\jwt\\node_modules\\mysql\\lib\\Connection.js:488:16)\n    at Sequence.end (D:\\URl\\web\\jwt\\node_modules\\mysql\\lib\\protocol\\sequences\\Sequence.js:83:24)\n    at Query._handleFinalResultPacket (D:\\URl\\web\\jwt\\node_modules\\mysql\\lib\\protocol\\sequences\\Query.js:149:8)\n    at Query.EofPacket (D:\\URl\\web\\jwt\\node_modules\\mysql\\lib\\protocol\\sequences\\Query.js:133:8)\n    at Protocol._parsePacket (D:\\URl\\web\\jwt\\node_modules\\mysql\\lib\\protocol\\Protocol.js:291:23)\n    at Parser._parsePacket (D:\\URl\\web\\jwt\\node_modules\\mysql\\lib\\protocol\\Parser.js:433:10)\n    at Parser.write (D:\\URl\\web\\jwt\\node_modules\\mysql\\lib\\protocol\\Parser.js:43:10)"}
+{"level":"info","message":"Servidor iniciado en el puerto 3000 🚀"}
+{"level":"info","message":"Conexión exitosa a la base de datos"}
+{"level":"info","message":"Servidor iniciado en el puerto 3000 🚀"}
+{"level":"info","message":"Conexión exitosa a la base de datos"}
+{"level":"info","message":"Servidor iniciado en el puerto 3000 🚀"}
+{"level":"info","message":"Conexión exitosa a la base de datos"}
+{"level":"info","message":"Servidor iniciado en el puerto 3000 🚀"}
+{"level":"info","message":"Conexión exitosa a la base de datos"}
+{"level":"info","message":"Servidor iniciado en el puerto 3000 🚀"}
+{"level":"info","message":"Conexión exitosa a la base de datos"}
+{"level":"info","message":"Servidor iniciado en el puerto 3000 🚀"}
+{"level":"info","message":"Conexión exitosa a la base de datos"}
+{"level":"info","message":"Servidor iniciado en el puerto 3000 🚀"}
+{"level":"info","message":"Conexión exitosa a la base de datos"}

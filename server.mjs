@@ -2,7 +2,9 @@ import bcrypt from "bcrypt";
 import express from "express";
 import jwt from "jsonwebtoken";
 import mysql from "mysql";
+import swaggerUI from "swagger-ui-express";
 import winston from "winston";
+import swaggerSpec from "./swagger.js";
 
 const saltRounds = 10;
 const app = express();
@@ -17,7 +19,7 @@ const logger = winston.createLogger({
     // Show the log in the console
     new winston.transports.Console(),
   ],
-}); 
+});
 
 const mysqlClient = mysql.createConnection({
   host: "localhost",
@@ -34,7 +36,38 @@ mysqlClient.connect((err) => {
   logger.info("Conexión exitosa a la base de datos");
 });
 
-// Register user post
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+
+/**
+ * @swagger
+ * /register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User registered successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Error occurred while registering user or hashing password
+ */
 app.post("/register", (req, res) => {
   const { username, password } = req.body;
 
@@ -59,7 +92,38 @@ app.post("/register", (req, res) => {
   });
 });
 
-// Login user post
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Log in a user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User logged in successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       401:
+ *         description: Invalid password or user not found
+ *       500:
+ *         description: Error occurred while logging in or comparing passwords
+ */
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
 
@@ -119,8 +183,35 @@ const checkToken = (req, res, next) => {
   });
 };
 
-// Get assigned courses from the table courses and user_courses, the user must be logged in and are private based
-// on the ID inside the jwt
+/**
+ * @swagger
+ * /courses:
+ *   get:
+ *     summary: Get courses for a user
+ *     tags: [Courses]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of courses
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   course_id:
+ *                     type: integer
+ *                   coursename:
+ *                     type: string
+ *                   total:
+ *                     type: integer
+ *       401:
+ *         description: User not found
+ *       500:
+ *         description: Error occurred while getting courses
+ */
 app.get("/courses", checkToken, (req, res) => {
   // Token from the header
   const token = req.headers["authorization"];
@@ -153,7 +244,31 @@ app.get("/courses", checkToken, (req, res) => {
   });
 });
 
-// Get the highest course based on the total column in the table user_courses and the user must be logged in
+/**
+ * @swagger
+ * /highest-course:
+ *   get:
+ *     summary: Get the course with the highest total for a user
+ *     tags: [Courses]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Course with the highest total
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 coursename:
+ *                   type: string
+ *                 total:
+ *                   type: integer
+ *       401:
+ *         description: User not found
+ *       500:
+ *         description: Error occurred while getting the highest course
+ */
 app.get("/highest-course", checkToken, (req, res) => {
   const token = req.headers["authorization"];
   const decoded = jwt.decode(token);
@@ -177,6 +292,31 @@ app.get("/highest-course", checkToken, (req, res) => {
   });
 });
 
+/**
+ * @swagger
+ * /lower-course:
+ *   get:
+ *     summary: Get the course with the lowest total for a user
+ *     tags: [Courses]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Course with the lowest total
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 coursename:
+ *                   type: string
+ *                 total:
+ *                   type: integer
+ *       401:
+ *         description: User not found
+ *       500:
+ *         description: Error occurred while getting the lowest course
+ */
 app.get("/lower-course", checkToken, (req, res) => {
   const token = req.headers["authorization"];
   const decoded = jwt.decode(token);
